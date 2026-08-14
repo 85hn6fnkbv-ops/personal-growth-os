@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111318">
+<title>个人成长 OS · V2.1</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--text:#17191d;--muted:#747a83;--line:#e5e7eb;--soft:#eef0f3;--accent:#111318;--green:#198754;--red:#c94141}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{min-height:100vh}.side{position:fixed;z-index:5;inset:0 auto 0 0;width:230px;background:#111318;color:#fff;padding:22px 14px}.brand{font-size:20px;font-weight:800;padding:8px 10px 24px}.nav button{display:block;width:100%;border:0;background:transparent;color:#abb1ba;text-align:left;padding:11px 12px;border-radius:10px;margin:4px 0}.nav button.active,.nav button:hover{background:#252a32;color:#fff}.main{margin-left:230px;padding:28px;max-width:1450px}.section{display:none}.section.show{display:block}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.title{font-size:28px;font-weight:800}.sub,.muted{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 10px #00000006}.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}.metric{font-size:30px;font-weight:800;margin-top:8px}.bar{height:9px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}.task{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.task:last-child{border:0}.task input,.habit input{width:18px;height:18px}.task.done label{text-decoration:line-through;color:var(--muted)}.task small{margin-left:auto;color:var(--muted)}.task button,.goal button{border:0;background:transparent;color:var(--muted);font-size:18px}.btn{border:0;background:var(--accent);color:#fff;padding:9px 13px;border-radius:9px}.btn.secondary{background:var(--soft);color:var(--text)}input,textarea,select{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 10px;outline:none}.add{display:flex;gap:8px;margin-top:12px}.add input{flex:1}.subject{display:flex;align-items:center;gap:10px;margin:13px 0}.subject b{width:45px}.subject .bar{flex:1;margin:0}.timer{text-align:center;font-size:58px;font-weight:800;margin:16px 0}.center{text-align:center}.habit{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--line)}.habit:last-child{border:0}.goal{padding:12px 0;border-bottom:1px solid var(--line)}.note{width:100%;min-height:190px;resize:vertical}.chart{display:flex;align-items:end;gap:10px;height:180px;padding-top:20px}.day{flex:1;text-align:center}.day i{display:block;background:#111318;border-radius:7px 7px 0 0;min-height:4px}.day span{display:block;color:var(--muted);font-size:11px;margin-top:6px}.empty{text-align:center;color:var(--muted);padding:25px}.toast{display:none;position:fixed;z-index:10;right:18px;bottom:18px;background:#111318;color:#fff;padding:11px 14px;border-radius:10px}.danger{color:var(--red)!important}
+@media(max-width:900px){
+.side{width:185px;padding:15px 10px}
+.brand{font-size:20px}
+.brand:after{content:""}
+.nav button{font-size:15px;text-align:left;padding:11px 12px}
+.nav button:before{content:""}
+.main{margin-left:185px;padding:17px}
+.s3,.s4,.s5,.s6,.s7,.s8{grid-column:span 12}
+.title{font-size:23px}
+}
+@media(max-width:520px){
+.side{width:150px}
+.main{margin-left:150px}
+.nav button{font-size:14px}
+.brand{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side"><div class="brand">个人成长 OS</div><div class="nav">
+<button class="active" data-page="home">🏠　首页</button>
+<button data-page="tasks">☑️　任务</button>
+<button data-page="study">📚　学习</button>
+<button data-page="focus">⏱️　专注</button>
+<button data-page="habits">🔥　习惯</button>
+<button data-page="goals">🎯　目标</button>
+<button data-page="review">📝　复盘</button>
+<button data-page="data">💾　数据</button>
+</div></aside>
+
+<main class="main">
+<section id="home" class="section show">
+<div class="top"><div><div class="title">今天，做该做的事。</div><div class="sub" id="date"></div></div><button class="btn" onclick="showPage('focus')">开始专注</button></div>
+<div class="grid">
+<div class="card s3"><div class="muted">任务完成</div><div class="metric" id="taskMetric">0/0</div></div>
+<div class="card s3"><div class="muted">今日完成率</div><div class="metric" id="rate">0%</div><div class="bar"><i id="ratebar"></i></div></div>
+<div class="card s3"><div class="muted">今日学习</div><div class="metric" id="studyMetric">0m</div></div>
+<div class="card s3"><div class="muted">习惯完成</div><div class="metric" id="habitMetric">0/0</div></div>
+<div class="card s7"><h3>📌 今日任务</h3><div id="homeTasks"></div></div>
+<div class="card s5"><h3>📚 六科进度</h3><div id="homeSubjects"></div></div>
+<div class="card s12"><h3>📈 最近 7 天专注</h3><div class="chart" id="chart"></div></div>
+</div></section>
+
+<section id="tasks" class="section"><div class="top"><div><div class="title">今日任务</div><div class="sub">只添加今天真正要做的事。</div></div></div>
+<div class="card"><div id="tasksList"></div><div class="add"><input id="taskText" placeholder="例如：数学圆锥曲线 20 题"><select id="taskType"><option>学习</option><option>运动</option><option>个人</option><option>项目</option></select><button class="btn" onclick="addTask()">添加</button></div></div></section>
+
+<section id="study" class="section"><div class="top"><div><div class="title">学习</div><div class="sub">记录真实进度。</div></div></div>
+<div class="grid"><div class="card s8"><h3>六科一轮进度</h3><div id="subjects"></div></div><div class="card s4"><h3>累计专注</h3><div class="metric" id="totalStudy">0m</div><p class="muted">完成完整专注周期后自动累计。</p></div></div></section>
+
+<section id="focus" class="section"><div class="top"><div><div class="title">专注</div><div class="sub">默认 25 分钟，可暂停。</div></div></div>
+<div class="card center"><div class="timer" id="timer">25:00</div><button class="btn" onclick="startTimer()">开始</button> <button class="btn secondary" onclick="pauseTimer()">暂停</button> <button class="btn secondary" onclick="resetTimer()">重置</button></div></section>
+
+<section id="habits" class="section"><div class="top"><div><div class="title">习惯</div><div class="sub">每天只追踪少数关键行为。</div></div></div>
+<div class="card"><div id="habitList"></div><div class="add"><input id="habitText" placeholder="例如：运动 30 分钟"><button class="btn" onclick="addHabit()">添加</button></div></div></section>
+
+<section id="goals" class="section"><div class="top"><div><div class="title">目标</div><div class="sub">目标必须最终落到今天。</div></div></div>
+<div class="card"><div id="goalList"></div><div class="add"><input id="goalText" placeholder="例如：完成高考一轮复习"><button class="btn" onclick="addGoal()">添加</button></div></div></section>
+
+<section id="review" class="section"><div class="top"><div><div class="title">每日复盘</div><div class="sub">事实 → 问题 → 明天第一步。</div></div></div>
+<div class="card"><textarea id="review" class="note" placeholder="今天完成了什么？哪里浪费了时间？最大问题是什么？明天第一件事做什么？"></textarea><br><br><button class="btn" onclick="saveReview()">保存复盘</button></div></section>
+
+<section id="data" class="section"><div class="top"><div><div class="title">数据管理</div><div class="sub">备份很重要：当前版本数据仍保存在浏览器本地。</div></div></div>
+<div class="card"><button class="btn" onclick="exportData()">导出备份</button> <button class="btn secondary" onclick="importData()">导入备份</button> <button class="btn secondary" onclick="resetData()">恢复默认</button><p class="muted">导出 JSON 后，可以在另一台设备导入。V2.2 再做云端同步。</p></div></section>
+</main></div><div id="toast" class="toast"></div>
+
+<script>
+const KEY="personal_growth_os_v21";
+const dayKey=()=>new Date().toISOString().slice(0,10);
+let data=JSON.parse(localStorage.getItem(KEY)||"null")||{
+tasks:[
+{id:1,text:"数学：圆锥曲线 20 题",type:"学习",done:false},
+{id:2,text:"英语：3500词 150 个",type:"学习",done:false},
+{id:3,text:"运动 30 分钟",type:"运动",done:false}],
+subjects:{语文:20,数学:35,英语:28,物理:20,化学:22,技术:30},
+habits:[{id:1,text:"运动 30 分钟",done:false},{id:2,text:"睡前不刷短视频",done:false}],
+goals:["高考六科完成系统一轮复习","建立稳定的每日学习节奏"],
+minutesByDay:{},reviews:{}
+};
+let remaining=1500,timerId=null;
+
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.style.display="block";setTimeout(()=>x.style.display="none",1800)}
+function showPage(id){document.querySelectorAll(".section").forEach(x=>x.classList.remove("show"));document.getElementById(id).classList.add("show");document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===id));render()}
+document.querySelectorAll(".nav button").forEach(x=>x.onclick=()=>showPage(x.dataset.page));
+document.getElementById("date").textContent=new Date().toLocaleDateString("zh-CN",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
+
+function addTask(){const x=document.getElementById("taskText");if(!x.value.trim())return;data.tasks.push({id:Date.now(),text:x.value.trim(),type:document.getElementById("taskType").value,done:false});x.value="";save()}
+function toggleTask(id){const t=data.tasks.find(x=>x.id===id);if(t)t.done=!t.done;save()}
+function delTask(id){data.tasks=data.tasks.filter(x=>x.id!==id);save()}
+function taskHTML(t){return `<div class="task ${t.done?"done":""}"><input type="checkbox" ${t.done?"checked":""} onchange="toggleTask(${t.id})"><label>${esc(t.text)}</label><small>${t.type}</small><button class="danger" onclick="delTask(${t.id})">×</button></div>`}
+
+function addHabit(){const x=document.getElementById("habitText");if(!x.value.trim())return;data.habits.push({id:Date.now(),text:x.value.trim(),done:false});x.value="";save()}
+function toggleHabit(id){const h=data.habits.find(x=>x.id===id);if(h)h.done=!h.done;save()}
+function delHabit(id){data.habits=data.habits.filter(x=>x.id!==id);save()}
+
+function addGoal(){const x=document.getElementById("goalText");if(!x.value.trim())return;data.goals.push(x.value.trim());x.value="";save()}
+function delGoal(i){data.goals.splice(i,1);save()}
+
+function changeSubject(k){const v=Number(prompt(`修改 ${k} 进度（0-100）`,data.subjects[k]));if(Number.isFinite(v))data.subjects[k]=Math.max(0,Math.min(100,v));save()}
+function subjectsHTML(){return Object.entries(data.subjects).map(([k,v])=>`<div class="subject"><b>${k}</b><div class="bar"><i style="width:${v}%"></i></div><span class="muted">${v}%</span><button class="btn secondary" onclick="changeSubject('${k}')">修改</button></div>`).join("")}
+
+function startTimer(){if(timerId)return;timerId=setInterval(()=>{remaining--;document.getElementById("timer").textContent=format(remaining);if(remaining<=0){clearInterval(timerId);timerId=null;const k=dayKey();data.minutesByDay[k]=(data.minutesByDay[k]||0)+25;remaining=1500;save();toast("专注完成，已记录 25 分钟");}},1000)}
+function pauseTimer(){clearInterval(timerId);timerId=null}
+function resetTimer(){pauseTimer();remaining=1500;document.getElementById("timer").textContent="25:00"}
+function format(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+
+function saveReview(){data.reviews[dayKey()]=document.getElementById("review").value;save();toast("复盘已保存")}
+function exportData(){const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="personal-growth-os-backup.json";a.click();URL.revokeObjectURL(a.href);toast("备份已导出")}
+function importData(){const input=document.createElement("input");input.type="file";input.accept=".json";input.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{data=JSON.parse(r.result);save();toast("备份导入成功")}catch{toast("备份文件无效")}};r.readAsText(f)};input.click()}
+function resetData(){if(confirm("确定恢复默认数据吗？当前本地数据会被清除。")){localStorage.removeItem(KEY);location.reload()}}
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){
+const done=data.tasks.filter(x=>x.done).length,total=data.tasks.length,rate=total?Math.round(done/total*100):0;
+document.getElementById("taskMetric").textContent=`${done}/${total}`;
+document.getElementById("rate").textContent=rate+"%";
+document.getElementById("ratebar").style.width=rate+"%";
+const today=data.minutesByDay[dayKey()]||0;
+const totalMinutes=Object.values(data.minutesByDay).reduce((a,b)=>a+b,0);
+document.getElementById("studyMetric").textContent=today+"m";
+document.getElementById("totalStudy").textContent=totalMinutes+"m";
+document.getElementById("habitMetric").textContent=data.habits.filter(x=>x.done).length+"/"+data.habits.length;
+document.getElementById("tasksList").innerHTML=data.tasks.map(taskHTML).join("")||'<div class="empty">暂无任务</div>';
+document.getElementById("homeTasks").innerHTML=data.tasks.slice(0,7).map(taskHTML).join("")||'<div class="empty">暂无任务</div>';
+document.getElementById("subjects").innerHTML=subjectsHTML();
+document.getElementById("homeSubjects").innerHTML=subjectsHTML();
+document.getElementById("habitList").innerHTML=data.habits.map(h=>`<div class="habit"><input type="checkbox" ${h.done?"checked":""} onchange="toggleHabit(${h.id})"><label>${esc(h.text)}</label><button class="danger" onclick="delHabit(${h.id})">×</button></div>`).join("");
+document.getElementById("goalList").innerHTML=data.goals.map((g,i)=>`<div class="goal">🎯 ${esc(g)} <button class="danger" onclick="delGoal(${i})">×</button></div>`).join("");
+document.getElementById("review").value=data.reviews[dayKey()]||"";
+const days=[];for(let i=6;i>=0;i--){const dt=new Date();dt.setDate(dt.getDate()-i);const k=dt.toISOString().slice(0,10);days.push({m:data.minutesByDay[k]||0,label:dt.toLocaleDateString("zh-CN",{weekday:"short"})})}
+const max=Math.max(25,...days.map(x=>x.m));document.getElementById("chart").innerHTML=days.map(x=>`<div class="day"><i style="height:${Math.max(4,x.m/max*130)}px"></i><span>${x.label}<br>${x.m}m</span></div>`).join("");
+}
+render();
+</script>
+</body>
+</html>
