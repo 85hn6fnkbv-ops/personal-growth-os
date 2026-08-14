@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>个人成长工作台</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--text:#17191c;--muted:#737980;--line:#e7e9ed;--accent:#111827;--soft:#eef1f5;--ok:#198754}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text)}
+.app{display:flex;min-height:100vh}.side{width:225px;background:#111318;color:#fff;padding:22px 14px;position:fixed;inset:0 auto 0 0}.brand{font-size:20px;font-weight:800;padding:8px 10px 24px}.nav button{display:block;width:100%;text-align:left;padding:11px 12px;margin:4px 0;border-radius:10px;background:transparent;color:#b9bec7}.nav button.active,.nav button:hover{background:#242830;color:#fff}.main{margin-left:225px;width:calc(100% - 225px);padding:28px;max-width:1400px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.title{font-size:28px;font-weight:800}.date,.muted{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 8px #00000005}.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}.metric{font-size:30px;font-weight:800;margin-top:8px}.bar{height:9px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}.task{display:flex;gap:10px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}.task:last-child{border-bottom:0}.task input{width:18px;height:18px}.task.done label{text-decoration:line-through;color:var(--muted)}.task small{margin-left:auto;color:var(--muted)}.btn{padding:9px 13px;border-radius:9px;background:#111318;color:#fff}.btn.secondary{background:var(--soft);color:var(--text)}input,textarea,select{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 10px;outline:none}.add{display:flex;gap:8px;margin-top:12px}.add input{flex:1}.subject{display:flex;align-items:center;gap:12px;margin:12px 0}.subject b{width:45px}.subject .bar{flex:1;margin:0}.timer{text-align:center;font-size:54px;font-weight:800;margin:15px 0}.timer-controls{text-align:center}.section{display:none}.section.show{display:block}.note{width:100%;min-height:180px;resize:vertical}.goal{padding:12px 0;border-bottom:1px solid var(--line)}@media(max-width:850px){.side{width:68px;padding:15px 7px}.brand{font-size:0}.brand:after{content:"OS";font-size:20px}.nav button{font-size:0;text-align:center}.nav button:before{font-size:18px}.main{margin-left:68px;width:calc(100% - 68px);padding:17px}.s3,.s4,.s5,.s7,.s8{grid-column:span 12}.title{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side"><div class="brand">个人成长 OS</div><div class="nav">
+<button class="active" data-p="home">🏠　首页</button><button data-p="tasks">☑️　任务</button><button data-p="study">📚　学习</button><button data-p="focus">⏱️　专注</button><button data-p="habits">🔥　习惯</button><button data-p="goals">🎯　目标</button><button data-p="review">📝　复盘</button>
+</div></aside>
+<main class="main">
+<section id="home" class="section show"><div class="top"><div><div class="title">个人成长工作台</div><div class="date" id="date"></div></div><button class="btn" onclick="show('focus')">开始专注</button></div>
+<div class="grid">
+<div class="card s3"><div class="muted">今日任务</div><div class="metric" id="taskMetric">0/0</div></div>
+<div class="card s3"><div class="muted">今日完成度</div><div class="metric" id="rate">0%</div><div class="bar"><i id="ratebar"></i></div></div>
+<div class="card s3"><div class="muted">今日学习</div><div class="metric" id="studyMetric">0m</div></div>
+<div class="card s3"><div class="muted">习惯完成</div><div class="metric" id="habitMetric">0/0</div></div>
+<div class="card s7"><h3>📌 今天做什么</h3><div id="homeTasks"></div></div>
+<div class="card s5"><h3>📚 学习进度</h3><div id="homeSubjects"></div></div>
+<div class="card s12"><h3>🎯 当前重点</h3><div id="homeGoals"></div></div>
+</div></section>
+
+<section id="tasks" class="section"><div class="top"><div><div class="title">今日任务</div><div class="date">把目标变成具体动作。</div></div></div><div class="card"><div id="tasksList"></div><div class="add"><input id="taskText" placeholder="例如：数学圆锥曲线 20 题"><select id="taskType"><option>学习</option><option>运动</option><option>个人</option><option>项目</option></select><button class="btn" onclick="addTask()">添加</button></div></div></section>
+
+<section id="study" class="section"><div class="top"><div><div class="title">学习</div><div class="date">记录真正的进度，不记录自我感觉。</div></div></div><div class="grid"><div class="card s8"><h3>六科进度</h3><div id="subjects"></div></div><div class="card s4"><h3>学习数据</h3><div class="metric" id="weekStudy">0m</div><div class="muted">累计专注时间</div></div></div></section>
+
+<section id="focus" class="section"><div class="top"><div><div class="title">专注</div><div class="date">25 分钟一个完整专注周期。</div></div></div><div class="card"><div class="timer" id="timer">25:00</div><div class="timer-controls"><button class="btn" onclick="startTimer()">开始</button> <button class="btn secondary" onclick="pauseTimer()">暂停</button> <button class="btn secondary" onclick="resetTimer()">重置</button></div></div></section>
+
+<section id="habits" class="section"><div class="top"><div><div class="title">习惯</div><div class="date">只追踪真正影响长期结果的行为。</div></div></div><div class="card"><div id="habitList"></div><div class="add"><input id="habitText" placeholder="例如：运动 30 分钟"><button class="btn" onclick="addHabit()">添加习惯</button></div></div></section>
+
+<section id="goals" class="section"><div class="top"><div><div class="title">目标</div><div class="date">目标必须最终落到今天。</div></div></div><div class="card"><div id="goalList"></div><div class="add"><input id="goalText" placeholder="例如：完成高考一轮复习第一阶段"><button class="btn" onclick="addGoal()">添加</button></div></div></section>
+
+<section id="review" class="section"><div class="top"><div><div class="title">每日复盘</div><div class="date">事实 → 问题 → 下一步。</div></div></div><div class="card"><textarea id="review" class="note" placeholder="今天完成了什么？哪里浪费了时间？最大的一个问题是什么？明天第一件事做什么？"></textarea><br><br><button class="btn" onclick="saveReview()">保存复盘</button></div></section>
+</main></div>
+<script>
+const K="growth_os_v1";
+let d=JSON.parse(localStorage.getItem(K)||"null")||{
+tasks:[{id:1,text:"数学：圆锥曲线 20 题",type:"学习",done:false},{id:2,text:"英语：3500词 150 个",type:"学习",done:false}],
+subjects:{语文:20,数学:35,英语:28,物理:20,化学:22,技术:30},
+habits:[{id:1,text:"运动 30 分钟",done:false},{id:2,text:"睡前不刷短视频",done:false}],
+goals:["高考六科完成系统一轮复习","建立稳定的每日学习节奏"],
+minutes:0,review:""};
+let sec=1500,tm=null;
+function save(){localStorage.setItem(K,JSON.stringify(d));render()}
+function show(id){document.querySelectorAll(".section").forEach(x=>x.classList.remove("show"));document.getElementById(id).classList.add("show");document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.p===id));render()}
+document.querySelectorAll(".nav button").forEach(x=>x.onclick=()=>show(x.dataset.p));
+document.getElementById("date").textContent=new Date().toLocaleDateString("zh-CN",{year:"numeric",month:"long",day:"numeric",weekday:"long"});
+function addTask(){let x=document.getElementById("taskText");if(!x.value.trim())return;d.tasks.push({id:Date.now(),text:x.value.trim(),type:document.getElementById("taskType").value,done:false});x.value="";save()}
+function toggleTask(id){let x=d.tasks.find(t=>t.id===id);x.done=!x.done;save()}
+function delTask(id){d.tasks=d.tasks.filter(t=>t.id!==id);save()}
+function taskHTML(t){return `<div class="task ${t.done?"done":""}"><input type="checkbox" ${t.done?"checked":""} onchange="toggleTask(${t.id})"><label>${esc(t.text)}</label><small>${t.type}</small><button onclick="delTask(${t.id})">×</button></div>`}
+function addHabit(){let x=document.getElementById("habitText");if(!x.value.trim())return;d.habits.push({id:Date.now(),text:x.value.trim(),done:false});x.value="";save()}
+function toggleHabit(id){d.habits.find(x=>x.id===id).done=!d.habits.find(x=>x.id===id).done;save()}
+function addGoal(){let x=document.getElementById("goalText");if(!x.value.trim())return;d.goals.push(x.value.trim());x.value="";save()}
+function delGoal(i){d.goals.splice(i,1);save()}
+function changeSubject(k){let v=Number(prompt("修改 "+k+" 进度（0-100）",d.subjects[k]));if(Number.isFinite(v))d.subjects[k]=Math.max(0,Math.min(100,v));save()}
+function subjectsHTML(){return Object.entries(d.subjects).map(([k,v])=>`<div class="subject"><b>${k}</b><div class="bar"><i style="width:${v}%"></i></div><span class="muted">${v}%</span><button class="btn secondary" onclick="changeSubject('${k}')">修改</button></div>`).join("")}
+function startTimer(){if(tm)return;tm=setInterval(()=>{sec--;document.getElementById("timer").textContent=fmt(sec);if(sec<=0){clearInterval(tm);tm=null;d.minutes+=25;sec=1500;save();alert("专注完成，已记录 25 分钟。")}},1000)}
+function pauseTimer(){clearInterval(tm);tm=null}
+function resetTimer(){pauseTimer();sec=1500;document.getElementById("timer").textContent="25:00"}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function saveReview(){d.review=document.getElementById("review").value;save();alert("复盘已保存")}
+function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){
+let done=d.tasks.filter(x=>x.done).length,total=d.tasks.length,rate=total?Math.round(done/total*100):0;
+document.getElementById("taskMetric").textContent=`${done}/${total}`;document.getElementById("rate").textContent=rate+"%";document.getElementById("ratebar").style.width=rate+"%";document.getElementById("studyMetric").textContent=d.minutes+"m";document.getElementById("weekStudy").textContent=d.minutes+"m";document.getElementById("habitMetric").textContent=d.habits.filter(x=>x.done).length+"/"+d.habits.length;
+document.getElementById("tasksList").innerHTML=d.tasks.map(taskHTML).join("")||'<div class="muted">暂无任务</div>';document.getElementById("homeTasks").innerHTML=d.tasks.slice(0,6).map(taskHTML).join("")||'<div class="muted">暂无任务</div>';
+document.getElementById("subjects").innerHTML=subjectsHTML();document.getElementById("homeSubjects").innerHTML=subjectsHTML();
+document.getElementById("habitList").innerHTML=d.habits.map(x=>`<div class="task ${x.done?"done":""}"><input type="checkbox" ${x.done?"checked":""} onchange="toggleHabit(${x.id})"><label>${esc(x.text)}</label></div>`).join("");
+document.getElementById("goalList").innerHTML=d.goals.map((x,i)=>`<div class="goal">🎯 ${esc(x)} <button onclick="delGoal(${i})">×</button></div>`).join("");
+document.getElementById("homeGoals").innerHTML=d.goals.slice(0,3).map(x=>`<div class="goal">🎯 ${esc(x)}</div>`).join("");
+document.getElementById("review").value=d.review;
+}
+render();
+</script>
+</body></html>
